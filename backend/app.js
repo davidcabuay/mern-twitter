@@ -9,7 +9,10 @@ const csurf = require('csurf');
 const { isProduction } = require('./config/keys');
 
 require('./models/User');
+require('./config/passport');
+
 // const indexRouter = require('./routes/index');
+const passport = require('passport');
 const usersRouter = require('./routes/api/users');
 const tweetsRouter = require('./routes/api/tweets');
 const csrfRouter = require('./routes/api/csrf');
@@ -21,6 +24,8 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 // app.use(express.static(path.join(__dirname, 'public')));
+
+app.use(passport.initialize());
 
 if (!isProduction){
     app.use(cors());
@@ -39,7 +44,7 @@ app.use(
     app.use('/api/users', usersRouter);
     app.use('/api/tweets', tweetsRouter);
     app.use('/api/csrf', csrfRouter);
-    
+
     app.use((req, res, next) => {
     const err = new Error('Not Found');
     err.statusCode = 404;
