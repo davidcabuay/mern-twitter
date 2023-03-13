@@ -58,20 +58,6 @@ export const logout = () => dispatch => {
     dispatch(logoutUser());
 };
 
-const nullErrors = null;
-
-export const sessionErrorsReducer = (state = nullErrors, action) => {
-    switch(action.type) {
-        case RECEIVE_SESSION_ERRORS:
-            return action.errors;
-        case RECEIVE_CURRENT_USER:
-        case CLEAR_SESSION_ERRORS:
-            return nullErrors;
-        default:
-            return state;
-    }
-};
-
 const initialState = {
     user: undefined
 };
@@ -88,3 +74,17 @@ const sessionReducer = (state = initialState, action) => {
 };
 
 export default sessionReducer;
+
+const nullErrors = null;
+
+export const sessionErrorsReducer = (state = nullErrors, action) => {
+    switch(action.type) {
+        case RECEIVE_SESSION_ERRORS:
+            return action.errors;
+        case RECEIVE_CURRENT_USER:
+        case CLEAR_SESSION_ERRORS:
+            return nullErrors;
+        default:
+            return state;
+    }
+};
