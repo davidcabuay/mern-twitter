@@ -1,3 +1,4 @@
+const debug = require('debug');
 const express = require('express');
 // const path = require('path');
 const cookieParser = require('cookie-parser');
@@ -5,10 +6,9 @@ const logger = require('morgan');
 
 const cors = require('cors');
 const csurf = require('csurf');
-const debug = require('debug');
 const { isProduction } = require('./config/keys');
 
-
+require('./models/User');
 // const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/api/users');
 const tweetsRouter = require('./routes/api/tweets');
@@ -34,9 +34,13 @@ app.use(
             httpOnly: true
         }
     })
-);
-
-app.use((req, res, next) => {
+    );
+    
+    app.use('/api/users', usersRouter);
+    app.use('/api/tweets', tweetsRouter);
+    app.use('/api/csrf', csrfRouter);
+    
+    app.use((req, res, next) => {
     const err = new Error('Not Found');
     err.statusCode = 404;
     next(err);
@@ -53,10 +57,7 @@ app.use((err, req, res, next) => {
         statusCode,
         errors: err.errors
     })
-  });
+});
 // app.use('/', indexRouter);
-app.use('/api/users', usersRouter);
-app.use('/api/tweets', tweetsRouter);
-app.use('/api/csrf', csrfRouter);
 
 module.exports = app;
