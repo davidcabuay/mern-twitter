@@ -3,7 +3,10 @@ var router = express.Router();
 
 /* GET users listing. */
 router.get('/', function(req, res, next) {
-  res.send('bye please respond with a resource');
+  // res.send('bye please respond with a resource');
+  res.json({
+    message: "GET api/users"
+  })
 });
 
 module.exports = router;
