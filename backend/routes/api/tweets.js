@@ -20,46 +20,46 @@ router.get('/', async (req, res) => {
                                     .populate("author", "_id username")
                                     .sort({ createdAt: -1 });
         return res.json(tweets);
-        }
-        catch(err) {
+    }
+    catch(err) {
         return res.json([]);
-        }
-    });
+    }
+});
     
-    router.get('/user/:userId', async (req, res, next) => {
-        let user;
-        try {
+router.get('/user/:userId', async (req, res, next) => {
+    let user;
+    try {
         user = await User.findById(req.params.userId);
-        } catch(err) {
+    } catch(err) {
         const error = new Error('User not found');
         error.statusCode = 404;
         error.errors = { message: "No user found with that id" };
         return next(error);
-        }
-        try {
+    }
+    try {
         const tweets = await Tweet.find({ author: user._id })
                                     .sort({ createdAt: -1 })
                                     .populate("author", "_id username");
         return res.json(tweets);
-        }
-        catch(err) {
+    }
+    catch(err) {
         return res.json([]);
-        }
-    })
+    }
+})
     
-    router.get('/:id', async (req, res, next) => {
-        try {
+router.get('/:id', async (req, res, next) => {
+    try {
         const tweet = await Tweet.findById(req.params.id)
                                 .populate("author", "_id username");
         return res.json(tweet);
-        }
-        catch(err) {
+    }
+    catch(err) {
         const error = new Error('Tweet not found');
         error.statusCode = 404;
         error.errors = { message: "No tweet found with that id" };
         return next(error);
-        }
-    });
+    }
+});
 
 router.post('/', requireUser, validateTweetInput, async (req, res, next) => {
     try {
@@ -77,5 +77,5 @@ router.post('/', requireUser, validateTweetInput, async (req, res, next) => {
         }
     });
 
-    
+
 module.exports = router;
